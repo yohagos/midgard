@@ -3,6 +3,7 @@ package com.midgard.ticket;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,12 @@ public class TicketEntity {
     @Column(name = "content_text")
     private String content;
 
+    @Column(name = "created_timestamp")
+    private LocalDateTime createdAt;
+
+    @Column(name = "closed_timestamp")
+    private LocalDateTime closedAt;
+
     // comments will be added later
     public TicketEntity() {
 
@@ -45,6 +52,7 @@ public class TicketEntity {
         this.owner = owner;
         this.includedUsers = new ArrayList<>();
         this.content = content;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
