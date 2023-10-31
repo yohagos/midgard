@@ -1,9 +1,6 @@
-package com.midgard.services;
+package com.midgard.user;
 
 
-import com.midgard.entites.UserEntity;
-import com.midgard.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 
 

@@ -1,4 +1,4 @@
-package com.midgard.entites;
+package com.midgard.user;
 
 import jakarta.persistence.*;
 
