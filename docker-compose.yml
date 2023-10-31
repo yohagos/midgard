@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: midgard
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: midgard
+      POSTGRES_DB: midgard
+      POSTGRES_USER: root
