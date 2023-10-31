@@ -1,30 +1,46 @@
 package com.midgard.entites;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
+    private Long id;
 
+    @Column(name = "firstname")
     private String firstname;
 
+    @Column(name = "lastname")
     private String lastname;
 
+    @Column(name = "email")
+    @NotBlank(message = "email is necessary")
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
     private String email;
 
+    @Column(name = "password")
     private String password;
 
     private LocalDateTime timestamp;
+
+    public UserEntity() {
+
+    }
 
     public UserEntity(String firstname, String lastname, String email, String password) {
         this.firstname = firstname;
@@ -34,13 +50,19 @@ public class UserEntity {
         this.timestamp = LocalDateTime.now();
     }
 
-    public Integer getId() {
+    public UserEntity(Long id, String firstname, String lastname, String email, String password, LocalDateTime timestamp) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.timestamp = timestamp;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getFirstname() {
         return firstname;
@@ -76,5 +98,13 @@ public class UserEntity {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User=[id=%d, firstname=%s, lastname=%s, email%s, timestamp=%s]",
+                getId(), getFirstname(), getLastname(), getEmail(), getTimestamp()
+        );
     }
 }
