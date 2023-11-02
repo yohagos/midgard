@@ -1,5 +1,9 @@
 package com.midgard.configs;
 
+import com.midgard.comment.CommentEntity;
+import com.midgard.comment.CommentRepository;
+import com.midgard.ticket.TicketEntity;
+import com.midgard.ticket.TicketRepository;
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -12,16 +16,64 @@ import java.util.List;
 public class Config {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository repository) {
+    CommandLineRunner commandLineRunner(
+            UserRepository userRepository,
+            TicketRepository ticketRepository,
+            CommentRepository commentRepository) {
         return args -> {
-            repository.saveAll(
+            userRepository.saveAll(
                     List.of(
-                            new UserEntity("James", "King", "james@king.com", "test"),
-                            new UserEntity("Jennifer", "Queen", "jen@queen.com", "test")
+                            new UserEntity(
+                                    "James",
+                                    "King",
+                                    "james@king.com",
+                                    "test"),
+                            new UserEntity(
+                                    "Jennifer",
+                                    "Queen",
+                                    "jen@queen.com",
+                                    "test"),
+                            new UserEntity(
+                                    "Micheal",
+                                    "Jordan",
+                                    "michael@jordan.com",
+                                    "test"),
+                            new UserEntity(
+                                    "Asuka",
+                                    "Fuji",
+                                    "asuka@fuji.com",
+                                    "test")
                     )
             );
 
-            repository.findAll().forEach(System.out::println);
+            var ticketOwner = userRepository.findById(1L);
+
+            ticketRepository.saveAll(
+                    List.of(
+                            new TicketEntity(
+                                    "database migration",
+                                    ticketOwner.get(),
+                                    List.of(
+                                            ticketOwner.get()
+                                    ),
+                                    "content"
+                                    )
+                    )
+            );
+
+            commentRepository.saveAll(
+                    List.of(
+                            new CommentEntity(
+                                    1L,
+                                    ticketOwner.get(),
+                                    "need to be fixed"
+                            )
+                    )
+            );
+
+            userRepository.findAll().forEach(System.out::println);
+            ticketRepository.findAll().forEach(System.out::println);
+            commentRepository.findAll().forEach(System.out::println);
         };
     }
 }

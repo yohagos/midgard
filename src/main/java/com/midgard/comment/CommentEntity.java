@@ -27,10 +27,7 @@ public class CommentEntity {
     )
     private Long ticketId;
 
-    @Column(
-            name = "user",
-            nullable = false
-    )
+    @OneToOne
     private UserEntity user;
 
     @Column(
@@ -45,11 +42,11 @@ public class CommentEntity {
 
     }
 
-    public CommentEntity(Long ticketId, UserEntity user, String content, LocalDateTime timestamp) {
+    public CommentEntity(Long ticketId, UserEntity user, String content) {
         this.ticketId = ticketId;
         this.user = user;
         this.content = content;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
     }
 
     public CommentEntity(Long id, Long ticketId, UserEntity user, String content, LocalDateTime timestamp) {
@@ -98,5 +95,13 @@ public class CommentEntity {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Comment=[ticketID=%s, owner=%s, content=%s]",
+                getTicketId(), getUser(), getContent()
+        );
     }
 }

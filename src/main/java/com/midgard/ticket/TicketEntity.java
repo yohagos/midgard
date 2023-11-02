@@ -26,10 +26,12 @@ public class TicketEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "owner")
+
+    @OneToOne
     private UserEntity owner;
 
-    @Column(name = "included_users")
+
+    @OneToMany
     private List<UserEntity> includedUsers;
 
     @Column(name = "content_text")
@@ -44,6 +46,13 @@ public class TicketEntity {
     // comments will be added later
     public TicketEntity() {
 
+    }
+
+    public TicketEntity(String title, UserEntity owner, List<UserEntity> includedUsers, String content) {
+        this.title = title;
+        this.owner = owner;
+        this.includedUsers = includedUsers;
+        this.content = content;
     }
 
     public TicketEntity(Long id, String title, UserEntity owner, String content) {
@@ -93,5 +102,12 @@ public class TicketEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        var includeUsers = getIncludedUsers();
+        return String.format("Ticket=[id=%s, title=%s, owner=%s, content=%s]",
+                getId(), getTitle(), getOwner(), getContent());
     }
 }
