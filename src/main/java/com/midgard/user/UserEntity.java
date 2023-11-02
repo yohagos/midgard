@@ -36,6 +36,7 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "createdAt")
     private LocalDateTime timestamp;
 
     public UserEntity() {
@@ -50,13 +51,13 @@ public class UserEntity {
         this.timestamp = LocalDateTime.now();
     }
 
-    public UserEntity(Long id, String firstname, String lastname, String email, String password, LocalDateTime timestamp) {
+    public UserEntity(Long id, String firstname, String lastname, String email, String password) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
     }
 
     public Long getId() {
