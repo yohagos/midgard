@@ -1,5 +1,6 @@
 package com.midgard.comment;
 
+import com.midgard.ticket.TicketEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
 
@@ -21,11 +22,8 @@ public class CommentEntity {
     )
     private Long id;
 
-    @Column(
-            name = "ticket_id",
-            nullable = false
-    )
-    private Long ticketId;
+    @ManyToOne
+    private TicketEntity ticket;
 
     @OneToOne
     private UserEntity user;
@@ -42,16 +40,16 @@ public class CommentEntity {
 
     }
 
-    public CommentEntity(Long ticketId, UserEntity user, String content) {
-        this.ticketId = ticketId;
+    public CommentEntity(TicketEntity ticket, UserEntity user, String content) {
+        this.ticket = ticket;
         this.user = user;
         this.content = content;
         this.timestamp = LocalDateTime.now();
     }
 
-    public CommentEntity(Long id, Long ticketId, UserEntity user, String content, LocalDateTime timestamp) {
+    public CommentEntity(Long id, TicketEntity ticket, UserEntity user, String content, LocalDateTime timestamp) {
         this.id = id;
-        this.ticketId = ticketId;
+        this.ticket = ticket;
         this.user = user;
         this.content = content;
         this.timestamp = timestamp;
@@ -65,12 +63,12 @@ public class CommentEntity {
         this.id = id;
     }
 
-    public Long getTicketId() {
-        return ticketId;
+    public TicketEntity getTicket() {
+        return ticket;
     }
 
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
+    public void setTicket(TicketEntity ticket) {
+        this.ticket = ticket;
     }
 
     public UserEntity getUser() {
@@ -100,8 +98,8 @@ public class CommentEntity {
     @Override
     public String toString() {
         return String.format(
-                "Comment=[ticketID=%s, owner=%s, content=%s]",
-                getTicketId(), getUser(), getContent()
+                "Comment=[ticket=%s, comment=%s, content=%s]",
+                getTicket(), getUser(), getContent()
         );
     }
 }

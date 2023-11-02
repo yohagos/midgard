@@ -47,26 +47,34 @@ public class Config {
             );
 
             var ticketOwner = userRepository.findById(1L);
+            var includedUser = userRepository.findById(2L);
+
+            var ticket = new TicketEntity(
+                    "database migration",
+                    ticketOwner.get(),
+                    List.of(
+                            ticketOwner.get()
+                    ),
+                    "content"
+            );
 
             ticketRepository.saveAll(
                     List.of(
-                            new TicketEntity(
-                                    "database migration",
-                                    ticketOwner.get(),
-                                    List.of(
-                                            ticketOwner.get()
-                                    ),
-                                    "content"
-                                    )
+                            ticket
                     )
             );
 
             commentRepository.saveAll(
                     List.of(
                             new CommentEntity(
-                                    1L,
+                                    ticket,
                                     ticketOwner.get(),
                                     "need to be fixed"
+                            ),
+                            new CommentEntity(
+                                    ticket,
+                                    includedUser.get(),
+                                    "fixed"
                             )
                     )
             );

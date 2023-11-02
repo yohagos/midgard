@@ -1,5 +1,6 @@
 package com.midgard.ticket;
 
+import com.midgard.comment.CommentEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
 
@@ -43,7 +44,9 @@ public class TicketEntity {
     @Column(name = "closed_timestamp")
     private LocalDateTime closedAt;
 
-    // comments will be added later
+    @OneToMany
+    private List<CommentEntity> comments;
+
     public TicketEntity() {
 
     }
