@@ -25,7 +25,6 @@ public class UserController {
                         .getContext()
                         .getAuthentication()
                         .getPrincipal());
-        System.out.println(user);
         return userService.getAllUsers();
     }
 
