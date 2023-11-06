@@ -1,8 +1,8 @@
 package com.midgard.user;
 
-import com.midgard.user.UserEntity;
-import com.midgard.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +20,12 @@ public class UserController {
 
     @GetMapping
     public List<UserEntity> getAllUsers() {
+        OAuth2User user = (
+                (OAuth2User) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal());
+        System.out.println(user);
         return userService.getAllUsers();
     }
 
