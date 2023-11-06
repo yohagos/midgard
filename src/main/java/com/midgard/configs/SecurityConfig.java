@@ -39,7 +39,7 @@ public class SecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests()
-                .requestMatchers("unauthenticated", "/oauth2/**", "/login/**")
+                .requestMatchers("unauthenticated", "/oauth2/**", "/login/**", "api/v1/**")
                     .permitAll()
                 .anyRequest()
                 .fullyAuthenticated()

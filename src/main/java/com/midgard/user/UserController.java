@@ -6,6 +6,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
@@ -20,12 +21,22 @@ public class UserController {
 
     @GetMapping
     public List<UserEntity> getAllUsers() {
-        OAuth2User user = (
-                (OAuth2User) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal());
+        //OAuth2User user = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/email/{email}")
+    public UserEntity getUserByEmail(
+            @PathVariable("email") String email
+    ) {
+        return userService.findUserByEmail(email);
+    }
+
+    @GetMapping("/name/{name}")
+    public List<UserEntity> getUserByName(
+            @PathVariable("name") String name
+    ) {
+        return userService.findUsersByName(name);
     }
 
     @PostMapping(path = "/add")

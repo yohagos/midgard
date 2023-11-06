@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public Optional<UserEntity> getUserById(Long id) {
-        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        Optional<UserEntity> optionalUser = userRepository.findUserById(id);
 
         if (optionalUser.isPresent())
             return optionalUser;
@@ -41,5 +41,21 @@ public class UserService {
             throw new IllegalArgumentException("User by id " + id + " not found");
 
         userRepository.deleteById(id);
+    }
+
+    public UserEntity findUserByEmail(String email) {
+        var optionalUser = userRepository.findUserByEmail(email);
+        System.out.println(optionalUser);
+        if (!optionalUser.isPresent())
+            throw new IllegalArgumentException("No user has the email " + email);
+        return optionalUser.get();
+    }
+
+    public List<UserEntity> findUsersByName(String name) {
+        var optionalUsers = userRepository.findUsersByLastname(name);
+        System.out.println(optionalUsers);
+        if (!optionalUsers.isPresent())
+            throw new IllegalArgumentException("No users by the name of "+ name);
+        return optionalUsers.get();
     }
 }
