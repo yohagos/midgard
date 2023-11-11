@@ -1,40 +1,43 @@
 package com.midgard.user;
 
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
+@RequiredArgsConstructor
 public class UserController {
+
+    private final static Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService service) {
-        userService = service;
-    }
 
-    @GetMapping
+    @GetMapping("")
     public List<UserEntity> getAllUsers() {
-        //OAuth2User user = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        // OAuth2User user = ((OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        // log.info("userController", user);
         return userService.getAllUsers();
     }
 
-    @GetMapping("/email/{email}")
+    @GetMapping("/")
     public UserEntity getUserByEmail(
-            @PathVariable("email") String email
+            @RequestParam("email") String email
     ) {
         return userService.findUserByEmail(email);
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping("/name")
     public List<UserEntity> getUserByName(
-            @PathVariable("name") String name
+            @RequestParam("name") String name
     ) {
         return userService.findUsersByName(name);
     }
@@ -49,8 +52,17 @@ public class UserController {
     ) {
         if (!password.equals(passwordRepeat))
             throw new IllegalArgumentException("Passwords do not match");
-        UserEntity entity = new UserEntity(firstname, lastname, email, password);
-        userService.saveUser(entity);
+        /*UserEntity entity = new UserEntity(firstname, lastname, email, password);
+        userService.saveUser(entity);*/
         return "saved";
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordRequest request,
+            Principal connectedUser
+    ) {
+        userService.changePassword(request, connectedUser);
+        return ResponseEntity.ok().build();
     }
 }

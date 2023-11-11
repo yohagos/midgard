@@ -42,7 +42,13 @@ public class Config {
                                     "Asuka",
                                     "Fuji",
                                     "asuka@fuji.com",
-                                    "test")
+                                    "test"),
+                            new UserEntity(
+                                    "Admin",
+                                    "Admin",
+                                    "admin",
+                                    "admin"
+                            )
                     )
             );
 
