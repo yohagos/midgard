@@ -19,8 +19,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<UserEntity> getAllUsers() {
-        var users = userRepository.findAll();
-        System.out.println(users);
         return userRepository.findAll();
     }
 
@@ -55,7 +53,6 @@ public class UserService {
 
     public List<UserEntity> findUsersByName(String name) {
         var optionalUsers = userRepository.findUsersByLastname(name);
-        System.out.println(optionalUsers);
         if (!optionalUsers.isPresent())
             throw new IllegalArgumentException("No users by the name of "+ name);
         return optionalUsers.get();

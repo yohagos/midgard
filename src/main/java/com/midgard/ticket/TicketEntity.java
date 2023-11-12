@@ -35,10 +35,8 @@ public class TicketEntity {
     @Column(name = "title")
     private String title;
 
-
     @OneToOne
     private UserEntity owner;
-
 
     @OneToMany
     private List<UserEntity> includedUsers;
@@ -55,18 +53,21 @@ public class TicketEntity {
     @OneToMany
     private List<CommentEntity> comments;
 
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status;
 
-    public TicketEntity(String title, UserEntity owner, List<UserEntity> includedUsers, String content) {
+
+    public TicketEntity(String title, UserEntity owner, List<UserEntity> includedUsers, String content, TicketStatus status) {
         this.title = title;
         this.owner = owner;
         this.includedUsers = includedUsers;
         this.content = content;
         this.createdAt = LocalDateTime.now();
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        var includeUsers = getIncludedUsers();
         return String.format("Ticket=[id=%s, title=%s, owner=%s, content=%s]",
                 getId(), getTitle(), getOwner(), getContent());
     }

@@ -4,6 +4,7 @@ import com.midgard.comment.CommentEntity;
 import com.midgard.comment.CommentRepository;
 import com.midgard.ticket.TicketEntity;
 import com.midgard.ticket.TicketRepository;
+import com.midgard.ticket.TicketStatus;
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
 import com.midgard.user.UserRole;
@@ -65,14 +66,24 @@ public class Config {
                     "database migration",
                     ticketOwner.get(),
                     List.of(
-                            ticketOwner.get()
+                            includedUser.get()
                     ),
-                    "content"
+                    "content",
+                    TicketStatus.OPEN
             );
 
             ticketRepository.saveAll(
                     List.of(
-                            ticket
+                            ticket,
+                            new TicketEntity(
+                                    "security configuration",
+                                    includedUser.get(),
+                                    List.of(
+                                            ticketOwner.get()
+                                    ),
+                                    "content",
+                                    TicketStatus.OPEN
+                            )
                     )
             );
 

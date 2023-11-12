@@ -1,10 +1,7 @@
 package com.midgard.ticket;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,8 +12,22 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @GetMapping
+    @GetMapping("")
     public List<TicketEntity> getAllTickets() {
         return ticketService.getAllTickets();
+    }
+
+    @GetMapping(path = "/{id}")
+    public TicketEntity findTicketById(
+            @PathVariable Long id
+    ) {
+        return ticketService.findTicketById(id);
+    }
+
+    @GetMapping(params = "email")
+    public List<TicketEntity> findTicketByOwner(
+            @RequestParam String email
+    ) {
+        return ticketService.findTicketByOwner(email);
     }
 }
