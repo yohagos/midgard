@@ -24,18 +24,25 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/")
+    @GetMapping(params = "name")
+    public List<UserEntity> getUserByName(
+            @RequestParam("name") String name
+    ) {
+        return userService.findUsersByName(name);
+    }
+
+    @GetMapping(params = "email")
     public UserEntity getUserByEmail(
             @RequestParam("email") String email
     ) {
         return userService.findUserByEmail(email);
     }
 
-    @GetMapping(params = "name")
-    public List<UserEntity> getUserByName(
-            @RequestParam("name") String name
+    @DeleteMapping("/{id}")
+    public void deleteUserById(
+            @PathVariable Long id
     ) {
-        return userService.findUsersByName(name);
+        userService.deleteUser(id);
     }
 
     @PatchMapping

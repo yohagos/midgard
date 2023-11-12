@@ -54,7 +54,8 @@ public class AuthenticationService {
         );
 
         var user = userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalStateException("Could not find user by " + request.getEmail()));
+
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse
