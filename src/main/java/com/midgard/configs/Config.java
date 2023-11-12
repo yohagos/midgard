@@ -6,6 +6,7 @@ import com.midgard.ticket.TicketEntity;
 import com.midgard.ticket.TicketRepository;
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
+import com.midgard.user.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,26 +28,31 @@ public class Config {
                                     "James",
                                     "King",
                                     "james@king.com",
+                                    UserRole.USER_READ,
                                     "test"),
                             new UserEntity(
                                     "Jennifer",
                                     "Queen",
                                     "jen@queen.com",
+                                    UserRole.USER_READ,
                                     "test"),
                             new UserEntity(
                                     "Micheal",
                                     "Jordan",
                                     "michael@jordan.com",
+                                    UserRole.USER_READ,
                                     "test"),
                             new UserEntity(
                                     "Asuka",
                                     "Fuji",
                                     "asuka@fuji.com",
+                                    UserRole.USER_DELETE,
                                     "test"),
                             new UserEntity(
                                     "Admin",
                                     "Admin",
                                     "admin",
+                                    UserRole.USER_CREATE,
                                     "admin"
                             )
                     )

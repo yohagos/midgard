@@ -3,11 +3,19 @@ package com.midgard.ticket;
 import com.midgard.comment.CommentEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tickets")
 public class TicketEntity {
@@ -47,64 +55,13 @@ public class TicketEntity {
     @OneToMany
     private List<CommentEntity> comments;
 
-    public TicketEntity() {
-
-    }
 
     public TicketEntity(String title, UserEntity owner, List<UserEntity> includedUsers, String content) {
         this.title = title;
         this.owner = owner;
         this.includedUsers = includedUsers;
         this.content = content;
-    }
-
-    public TicketEntity(Long id, String title, UserEntity owner, String content) {
-        this.id = id;
-        this.title = title;
-        this.owner = owner;
-        this.includedUsers = new ArrayList<>();
-        this.content = content;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public UserEntity getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserEntity owner) {
-        this.owner = owner;
-    }
-
-    public List<UserEntity> getIncludedUsers() {
-        return includedUsers;
-    }
-
-    public void setIncludedUsers(List<UserEntity> includedUsers) {
-        this.includedUsers = includedUsers;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     @Override
@@ -113,4 +70,5 @@ public class TicketEntity {
         return String.format("Ticket=[id=%s, title=%s, owner=%s, content=%s]",
                 getId(), getTitle(), getOwner(), getContent());
     }
+
 }

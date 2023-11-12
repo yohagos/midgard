@@ -11,11 +11,11 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
@@ -50,13 +50,15 @@ public class UserEntity implements UserDetails {
     @Column(name = "createdAt")
     private LocalDateTime timestamp;
 
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public UserEntity(String firstname, String lastname, String email, String password) {
+    public UserEntity(String firstname, String lastname, String email, UserRole role, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.role = role;
         this.password = password;
     }
 
@@ -94,5 +96,13 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User=[id=%d, firstname=%s, lastname=%s, email%s, role=%s, timestamp=%s]",
+                getId(), getFirstname(), getLastname(), getEmail(), getRole(), getTimestamp()
+        );
     }
 }

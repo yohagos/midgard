@@ -19,6 +19,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<UserEntity> getAllUsers() {
+        var users = userRepository.findAll();
+        System.out.println(users);
         return userRepository.findAll();
     }
 
