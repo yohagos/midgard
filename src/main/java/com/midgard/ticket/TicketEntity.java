@@ -35,10 +35,10 @@ public class TicketEntity {
     @Column(name = "title")
     private String title;
 
-    @OneToOne
+    @ManyToOne
     private UserEntity owner;
 
-    @OneToMany
+    @ManyToMany
     private List<UserEntity> includedUsers;
 
     @Column(name = "content_text")

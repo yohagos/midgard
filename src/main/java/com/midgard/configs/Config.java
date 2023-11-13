@@ -83,6 +83,15 @@ public class Config {
                                     ),
                                     "content",
                                     TicketStatus.OPEN
+                            ),
+                            new TicketEntity(
+                                    "security enhancement",
+                                    includedUser.get(),
+                                    List.of(
+                                            ticketOwner.get()
+                                    ),
+                                    "content",
+                                    TicketStatus.OPEN
                             )
                     )
             );
