@@ -10,13 +10,7 @@ import java.util.Optional;
 @Repository
 public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 
-    /*void updateTicketContent(Long id, String content);
-
-    void updateTicketOwner(Long id, UserEntity user);*/
-
     Optional<List<TicketEntity>> findTicketByOwner(UserEntity user);
 
     Optional<List<TicketEntity>> findTicketByTitleContaining(String title);
-
-
 }

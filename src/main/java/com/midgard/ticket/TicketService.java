@@ -1,5 +1,6 @@
 package com.midgard.ticket;
 
+import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -81,9 +82,23 @@ public class TicketService {
                 .filter(
                         users -> !users.isEmpty()
                 )
-                .ifPresent(ticket::setIncludedUsers);
+                .ifPresent(ticket.getIncludedUsers()::addAll);
         ticketRepository.save(ticket);
         return TicketUpdateResponse.builder().response("updated successfully").build();
     }
 
+    public void removeUsersByUsername(Long ticket_id, Long user_id) {
+        var ticket = findTicketById(ticket_id);
+        var users = ticket.getIncludedUsers();
+        var iterator = users.iterator();
+        while (iterator.hasNext()) {
+            var user = iterator.next();
+            if (user.getId().equals(user_id)) {
+                iterator.remove();
+                break;
+            }
+        }
+        ticket.setIncludedUsers(users);
+        ticketRepository.save(ticket);
+    }
 }

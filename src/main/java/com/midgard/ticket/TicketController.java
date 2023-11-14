@@ -1,5 +1,6 @@
 package com.midgard.ticket;
 
+import com.midgard.user.UserEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -49,5 +50,15 @@ public class TicketController {
             @RequestBody TicketUpdateRequest request
     ) {
         return ResponseEntity.ok(ticketService.updateTicket(request));
+    }
+
+
+
+    @DeleteMapping("/delete/{ticket_id}/{user_id}")
+    public void deleteUserFromIncludedUsers(
+            @PathVariable("ticket_id") Long ticket_id,
+            @PathVariable("user_id") Long user_id
+    ) {
+        ticketService.removeUsersByUsername(ticket_id, user_id);
     }
 }

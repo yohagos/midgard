@@ -60,6 +60,7 @@ public class Config {
             );
 
             var ticketOwner = userRepository.findById(1L);
+            var otherUser = userRepository.findUserById(3L);
             var includedUser = userRepository.findById(2L);
 
             var ticket = new TicketEntity(
@@ -79,7 +80,8 @@ public class Config {
                                     "security configuration",
                                     includedUser.get(),
                                     List.of(
-                                            ticketOwner.get()
+                                            ticketOwner.get(),
+                                            otherUser.get()
                                     ),
                                     "content",
                                     TicketStatus.OPEN
