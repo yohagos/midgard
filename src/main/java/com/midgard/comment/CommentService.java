@@ -38,10 +38,14 @@ public class CommentService {
         return optionalComment.get();
     }
 
-    public CommentResponse addNewComment(CommentRequest newComment) {
+    private String getCurrentUsername() {
         var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         var header = request.getHeader("Authorization").split(" ")[1];
-        var username = jwtService.extractUsername(header);
+        return jwtService.extractUsername(header);
+    }
+
+    public CommentResponse addNewComment(CommentRequest newComment) {
+        var username = getCurrentUsername();
 
         var ticket = ticketRepository.findById(newComment.getTicket_id());
         if (!ticket.isPresent())
@@ -60,5 +64,32 @@ public class CommentService {
                 newComment.getContent(),
                 true
         );
+    }
+
+    public CommentResponse editComment(CommentEditRequest request) {
+        var username = getCurrentUsername();
+        var optionalComment = commentRepository.findById(request.getComment_id());
+        if (!optionalComment.isPresent())
+            throw new IllegalStateException("Could not find comment");
+        var newComment = optionalComment.get();
+        if (!newComment.getUser().getUsername().equals(username))
+            throw new IllegalStateException("Current user cannot edit the comment");
+
+        newComment.setContent(request.getContent());
+        newComment.setTimestamp(LocalDateTime.now());
+        commentRepository.save(newComment);
+        return new CommentResponse(
+                LocalDateTime.now(),
+                username,
+                newComment.getContent(),
+                true
+        );
+    }
+
+    public List<CommentEntity> findCommentsForTicket(Long ticketId) {
+        var optionalComments = commentRepository.findAll().stream().filter(commentEntity -> commentEntity.getTicket().getId() == ticketId).toList();
+        if (optionalComments.isEmpty())
+            return List.of();
+        return optionalComments;
     }
 }
