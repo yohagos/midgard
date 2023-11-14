@@ -2,9 +2,8 @@ package com.midgard.comment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,5 +17,19 @@ public class CommentController {
     @GetMapping
     public List<CommentEntity> getAllComments() {
         return commentService.getAllComments();
+    }
+
+    @GetMapping("/{id}")
+    public CommentEntity findCommentById(
+            @PathVariable("id") Long id
+    ) {
+        return commentService.findCommentById(id);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<CommentResponse> addCommentToTicket(
+            @RequestBody CommentRequest newComment
+    ) {
+        return ResponseEntity.ok(commentService.addNewComment(newComment));
     }
 }

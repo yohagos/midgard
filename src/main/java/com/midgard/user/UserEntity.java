@@ -31,6 +31,7 @@ public class UserEntity implements UserDetails {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "firstname")
@@ -50,7 +51,6 @@ public class UserEntity implements UserDetails {
     @Column(name = "createdAt")
     private LocalDateTime timestamp;
 
-
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -61,7 +61,6 @@ public class UserEntity implements UserDetails {
         this.role = role;
         this.password = password;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
