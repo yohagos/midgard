@@ -2,6 +2,7 @@ package com.midgard.ticket;
 
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TicketService {
 

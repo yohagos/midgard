@@ -3,9 +3,17 @@ package com.midgard.comment;
 import com.midgard.ticket.TicketEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
@@ -20,6 +28,7 @@ public class CommentEntity {
             strategy = GenerationType.SEQUENCE,
             generator = "comment_sequence"
     )
+    @Column(name = "comment_id")
     private Long id;
 
     @ManyToOne
@@ -36,63 +45,11 @@ public class CommentEntity {
 
     private LocalDateTime timestamp;
 
-    public CommentEntity() {
-
-    }
-
     public CommentEntity(TicketEntity ticket, UserEntity user, String content) {
         this.ticket = ticket;
         this.user = user;
         this.content = content;
         this.timestamp = LocalDateTime.now();
-    }
-
-    public CommentEntity(Long id, TicketEntity ticket, UserEntity user, String content, LocalDateTime timestamp) {
-        this.id = id;
-        this.ticket = ticket;
-        this.user = user;
-        this.content = content;
-        this.timestamp = timestamp;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public TicketEntity getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(TicketEntity ticket) {
-        this.ticket = ticket;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 
     @Override

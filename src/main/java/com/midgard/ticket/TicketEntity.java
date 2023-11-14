@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class TicketEntity {
             strategy = GenerationType.SEQUENCE,
             generator = "ticket_sequence"
     )
+    @Column(name = "ticket_id")
     private Long id;
 
     @Column(name = "title")
@@ -58,7 +60,13 @@ public class TicketEntity {
     private TicketStatus status;
 
 
-    public TicketEntity(String title, UserEntity owner, List<UserEntity> includedUsers, String content, TicketStatus status) {
+    public TicketEntity(
+            String title,
+            UserEntity owner,
+            List<UserEntity> includedUsers,
+            String content,
+            TicketStatus status
+    ) {
         this.title = title;
         this.owner = owner;
         this.includedUsers = includedUsers;
