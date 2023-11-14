@@ -52,8 +52,6 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.updateTicket(request));
     }
 
-
-
     @DeleteMapping("/delete/{ticket_id}/{user_id}")
     public void deleteUserFromIncludedUsers(
             @PathVariable("ticket_id") Long ticket_id,
