@@ -61,11 +61,9 @@ public class TicketController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<TicketUpdateResponse> changeTicketStatus(
-            @RequestBody TicketUpdateRequest request
+    public ResponseEntity<TicketStatusResponse> changeTicketStatus(
+            @RequestBody TicketStatusRequest request
     ) {
-        ticketService.updateTicketStatus(request);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ticketService.updateTicketStatus(request));
     }
 }

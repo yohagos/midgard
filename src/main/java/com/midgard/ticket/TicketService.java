@@ -1,5 +1,6 @@
 package com.midgard.ticket;
 
+import com.midgard.configs.JwtService;
 import com.midgard.user.UserRepository;
 import com.midgard.util.TokenUtil;
 import jakarta.transaction.Transactional;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,7 @@ public class TicketService implements TokenUtil {
 
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
     private static final Logger log = LoggerFactory.getLogger(TicketService.class);
 
@@ -106,10 +110,42 @@ public class TicketService implements TokenUtil {
 
     @Override
     public String getCurrentUsername() {
-        return "";
+        var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        var header = request.getHeader("Authorization").split(" ")[1];
+        return jwtService.extractUsername(header);
     }
 
-    public TicketUpdateResponse updateTicketStatus(TicketUpdateRequest request) {
-        return new TicketUpdateResponse();
+    public TicketStatusResponse updateTicketStatus(TicketStatusRequest request) {
+        var requestUser = userRepository.findUserByEmail(getCurrentUsername());
+        var optionalTicket = ticketRepository.findById(request.getTicket_id());
+        if (!requestUser.isPresent() || !optionalTicket.isPresent())
+            throw new IllegalStateException("Cannot find user by " + getCurrentUsername() + " or ticket cannot be found id " + request.getTicket_id());
+        var ticket = optionalTicket.get();
+        var user = requestUser.get();
+        if (ticket.getStatus().equals(TicketStatus.CLOSED))
+            throw new IllegalStateException("Ticket already closed. Please create a new ticket to continue");
+
+        switch (request.getChangeTo()) {
+            case "IMPLEMENTING":
+                ticket.setStatus(TicketStatus.IMPLEMENTING);
+                break;
+            case "REVIEWING":
+                ticket.setStatus(TicketStatus.REVIEWING);
+                break;
+            case "CLOSED":
+                ticket.setStatus(TicketStatus.CLOSED);
+                break;
+            default:
+                break;
+
+        }
+
+        ticketRepository.save(ticket);
+
+        return new TicketStatusResponse(
+                ticket.getStatus().toString(),
+                ticket.getId(),
+                true
+        );
     }
 }
