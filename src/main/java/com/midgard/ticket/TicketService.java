@@ -1,7 +1,7 @@
 package com.midgard.ticket;
 
-import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
+import com.midgard.util.TokenUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TicketService {
+public class TicketService implements TokenUtil {
 
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
@@ -102,5 +102,14 @@ public class TicketService {
         }
         ticket.setIncludedUsers(users);
         ticketRepository.save(ticket);
+    }
+
+    @Override
+    public String getCurrentUsername() {
+        return "";
+    }
+
+    public TicketUpdateResponse updateTicketStatus(TicketUpdateRequest request) {
+        return new TicketUpdateResponse();
     }
 }

@@ -59,4 +59,13 @@ public class TicketController {
     ) {
         ticketService.removeUsersByUsername(ticket_id, user_id);
     }
+
+    @PutMapping("/status")
+    public ResponseEntity<TicketUpdateResponse> changeTicketStatus(
+            @RequestBody TicketUpdateRequest request
+    ) {
+        ticketService.updateTicketStatus(request);
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -3,6 +3,7 @@ package com.midgard.comment;
 import com.midgard.configs.JwtService;
 import com.midgard.ticket.TicketRepository;
 import com.midgard.user.UserRepository;
+import com.midgard.util.TokenUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService {
+public class CommentService implements TokenUtil {
 
     private final CommentRepository commentRepository;
     private final TicketRepository ticketRepository;
@@ -38,7 +39,8 @@ public class CommentService {
         return optionalComment.get();
     }
 
-    private String getCurrentUsername() {
+    @Override
+    public String getCurrentUsername() {
         var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         var header = request.getHeader("Authorization").split(" ")[1];
         return jwtService.extractUsername(header);
