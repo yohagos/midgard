@@ -53,4 +53,11 @@ public class UserController {
         userService.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/permission")
+    public ResponseEntity<UserPermissionResponse> updateUserPermissions(
+            @RequestBody UserPermissionRequest request
+    ) {
+        return ResponseEntity.ok(userService.updateUserPermission(request));
+    }
 }

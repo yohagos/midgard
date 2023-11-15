@@ -8,14 +8,19 @@ import com.midgard.ticket.TicketStatus;
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
 import com.midgard.user.UserRole;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class Config {
+
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     CommandLineRunner commandLineRunner(
@@ -29,32 +34,36 @@ public class Config {
                                     "James",
                                     "King",
                                     "james@king.com",
-                                    UserRole.USER_READ,
-                                    "test"),
+                                    UserRole.USER,
+                                    passwordEncoder.encode("test")
+                            ),
                             new UserEntity(
                                     "Jennifer",
                                     "Queen",
                                     "jen@queen.com",
-                                    UserRole.USER_READ,
-                                    "test"),
+                                    UserRole.MANAGER,
+                                    passwordEncoder.encode("test")
+                            ),
                             new UserEntity(
                                     "Micheal",
                                     "Jordan",
                                     "michael@jordan.com",
-                                    UserRole.USER_READ,
-                                    "test"),
+                                    UserRole.USER,
+                                    passwordEncoder.encode("test")
+                            ),
                             new UserEntity(
                                     "Asuka",
                                     "Fuji",
                                     "asuka@fuji.com",
-                                    UserRole.USER_DELETE,
-                                    "test"),
+                                    UserRole.USER,
+                                    passwordEncoder.encode("test")
+                            ),
                             new UserEntity(
                                     "Admin",
                                     "Admin",
                                     "admin",
-                                    UserRole.USER_CREATE,
-                                    "admin"
+                                    UserRole.USER,
+                                    passwordEncoder.encode("test")
                             )
                     )
             );
