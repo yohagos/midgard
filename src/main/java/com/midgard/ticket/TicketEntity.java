@@ -62,6 +62,9 @@ public class TicketEntity {
     @Enumerated(EnumType.STRING)
     private List<TicketCategories> categories;
 
+    @Column(name = "priority")
+    private String priority;
+
 
     public TicketEntity(
             String title,

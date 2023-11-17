@@ -162,4 +162,18 @@ public class TicketService implements TokenUtil {
 
         return new TicketCategoriesResponse(true, request.getTicket_id());
     }
+
+    public List<TicketPriority> getPrioritesList() {
+        return List.of(TicketPriority.values());
+    }
+
+
+    public TicketPriorityResponse updateTicketPriority(TicketPriorityRequest request) {
+        var ticket = ticketRepository.findById(request.getTicket_id());
+        if (!ticket.isPresent())
+            throw new IllegalStateException("Can not find ticket id " + request.getTicket_id());
+        ticket.get().setPriority(request.getPriority().toString());
+
+        return new TicketPriorityResponse(true, request.getTicket_id());
+    }
 }
