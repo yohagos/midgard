@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,5 +148,18 @@ public class TicketService implements TokenUtil {
                 ticket.getId(),
                 true
         );
+    }
+
+    public List<TicketCategories> getCategoriesList() {
+        return List.of(TicketCategories.values());
+    }
+
+    public TicketCategoriesResponse updateTicketCategories(TicketCategoriesRequest request) {
+        var ticket = ticketRepository.findById(request.getTicket_id());
+        if (!ticket.isPresent())
+            throw new IllegalStateException("Can not find ticket " + request.getTicket_id());
+        ticket.get().setCategories(request.getCategories());
+
+        return new TicketCategoriesResponse(true, request.getTicket_id());
     }
 }

@@ -2,6 +2,7 @@ package com.midgard.configs;
 
 import com.midgard.comment.CommentEntity;
 import com.midgard.comment.CommentRepository;
+import com.midgard.ticket.TicketCategories;
 import com.midgard.ticket.TicketEntity;
 import com.midgard.ticket.TicketRepository;
 import com.midgard.ticket.TicketStatus;
@@ -79,7 +80,8 @@ public class Config {
                             includedUser.get()
                     ),
                     "content",
-                    TicketStatus.OPEN
+                    TicketStatus.OPEN,
+                    List.of(TicketCategories.DATABASE)
             );
 
             ticketRepository.saveAll(
@@ -93,7 +95,8 @@ public class Config {
                                             otherUser.get()
                                     ),
                                     "content",
-                                    TicketStatus.OPEN
+                                    TicketStatus.OPEN,
+                                    List.of(TicketCategories.INFRASTRUCTURE, TicketCategories.SECURITY)
                             ),
                             new TicketEntity(
                                     "security enhancement",
@@ -102,7 +105,8 @@ public class Config {
                                             ticketOwner.get()
                                     ),
                                     "content",
-                                    TicketStatus.OPEN
+                                    TicketStatus.OPEN,
+                                    List.of(TicketCategories.SECURITY)
                             )
                     )
             );

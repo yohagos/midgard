@@ -66,4 +66,16 @@ public class TicketController {
     ) {
         return ResponseEntity.ok(ticketService.updateTicketStatus(request));
     }
+
+    @GetMapping("/categories")
+    public List<TicketCategories> getListOfCategories() {
+        return ticketService.getCategoriesList();
+    }
+
+    @PutMapping("/categories")
+    public ResponseEntity<TicketCategoriesResponse> updateCategoriesForTicket(
+            @RequestBody TicketCategoriesRequest request
+    ) {
+        return ResponseEntity.ok(ticketService.updateTicketCategories(request));
+    }
 }

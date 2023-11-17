@@ -59,13 +59,17 @@ public class TicketEntity {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private List<TicketCategories> categories;
+
 
     public TicketEntity(
             String title,
             UserEntity owner,
             List<UserEntity> includedUsers,
             String content,
-            TicketStatus status
+            TicketStatus status,
+            List<TicketCategories> categories
     ) {
         this.title = title;
         this.owner = owner;
@@ -73,6 +77,7 @@ public class TicketEntity {
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.status = status;
+        this.categories = categories;
     }
 
     @Override
