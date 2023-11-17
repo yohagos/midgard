@@ -78,4 +78,16 @@ public class TicketController {
     ) {
         return ResponseEntity.ok(ticketService.updateTicketCategories(request));
     }
+
+    @GetMapping("/priorities")
+    public List<TicketPriority> getListOfPriorities() {
+        return ticketService.getPrioritesList();
+    }
+
+    @PutMapping("/priorities")
+    public ResponseEntity<TicketPriorityResponse> updateTicketPriority(
+            @RequestBody TicketPriorityRequest request
+    ) {
+        return ResponseEntity.ok(ticketService.updateTicketPriority(request));
+    }
 }
