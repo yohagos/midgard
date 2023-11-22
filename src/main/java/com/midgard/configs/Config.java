@@ -35,7 +35,7 @@ public class Config {
                                     "James",
                                     "King",
                                     "james@king.com",
-                                    UserRole.USER,
+                                    UserRole.ADMIN,
                                     passwordEncoder.encode("test")
                             ),
                             new UserEntity(
@@ -46,25 +46,11 @@ public class Config {
                                     passwordEncoder.encode("test")
                             ),
                             new UserEntity(
-                                    "Micheal",
-                                    "Jordan",
-                                    "michael@jordan.com",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
-                            ),
-                            new UserEntity(
-                                    "Asuka",
-                                    "Fuji",
-                                    "asuka@fuji.com",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
-                            ),
-                            new UserEntity(
-                                    "Admin",
-                                    "Admin",
                                     "admin",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
+                                    "admin",
+                                    "admin",
+                                    UserRole.ADMIN,
+                                    passwordEncoder.encode("admin")
                             )
                     )
             );
