@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class AuthenticationResponse {
 
-    @JsonProperty("access-token")
+    @JsonProperty("accessToken")
     private String accessToken;
-    @JsonProperty("refresh-token")
+    @JsonProperty("refreshToken")
     private String refreshToken;
 }
