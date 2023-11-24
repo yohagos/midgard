@@ -1,110 +1,81 @@
 package com.midgard.user;
 
 import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
+    @GeneratedValue
     private Long id;
-
-    @Column(name = "firstname")
     private String firstname;
-
-    @Column(name = "lastname")
     private String lastname;
-
-    @Column(name = "email")
-    @NotBlank(message = "email is necessary")
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
     private String email;
-
-    @Column(name = "password")
     private String password;
-
     private LocalDateTime timestamp;
 
-    public UserEntity() {
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
-    }
-
-    public UserEntity(String firstname, String lastname, String email, String password) {
+    public UserEntity(String firstname, String lastname, String email, UserRole role, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.role = role;
         this.password = password;
-        this.timestamp = LocalDateTime.now();
     }
 
-    public UserEntity(Long id, String firstname, String lastname, String email, String password, LocalDateTime timestamp) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.timestamp = timestamp;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "User=[id=%d, firstname=%s, lastname=%s, email%s, timestamp=%s]",
-                getId(), getFirstname(), getLastname(), getEmail(), getTimestamp()
+                "User=[id=%d, firstname=%s, lastname=%s, email%s, role=%s, timestamp=%s]",
+                getId(), getFirstname(), getLastname(), getEmail(), getRole(), getTimestamp()
         );
     }
 }
