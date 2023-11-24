@@ -36,7 +36,6 @@ public class Config {
                     .lastname("admin")
                     .email("admin")
                     .password(passwordEncoder.encode("admin"))
-                    .role(UserRole.ADMIN)
                     .build();
             System.out.println("Admin " + admin.getEmail() + ", Token: " + service.register(admin).getAccessToken());
 
@@ -45,7 +44,6 @@ public class Config {
                     .lastname("King")
                     .email("james@king.com")
                     .password(passwordEncoder.encode("test"))
-                    .role(UserRole.MANAGER)
                     .build();
             System.out.println("Manager " + manager.getEmail() + ", Token: " + service.register(manager).getAccessToken());
         };
