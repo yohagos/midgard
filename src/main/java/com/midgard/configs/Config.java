@@ -1,5 +1,7 @@
 package com.midgard.configs;
 
+import com.midgard.auth.AuthenticationService;
+import com.midgard.auth.RegisterRequest;
 import com.midgard.comment.CommentEntity;
 import com.midgard.comment.CommentRepository;
 import com.midgard.ticket.TicketCategories;
@@ -23,112 +25,29 @@ public class Config {
 
     private final PasswordEncoder passwordEncoder;
 
+
     @Bean
     CommandLineRunner commandLineRunner(
-            UserRepository userRepository,
-            TicketRepository ticketRepository,
-            CommentRepository commentRepository) {
+            AuthenticationService service
+    ) {
         return args -> {
-            userRepository.saveAll(
-                    List.of(
-                            new UserEntity(
-                                    "James",
-                                    "King",
-                                    "james@king.com",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
-                            ),
-                            new UserEntity(
-                                    "Jennifer",
-                                    "Queen",
-                                    "jen@queen.com",
-                                    UserRole.MANAGER,
-                                    passwordEncoder.encode("test")
-                            ),
-                            new UserEntity(
-                                    "Micheal",
-                                    "Jordan",
-                                    "michael@jordan.com",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
-                            ),
-                            new UserEntity(
-                                    "Asuka",
-                                    "Fuji",
-                                    "asuka@fuji.com",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
-                            ),
-                            new UserEntity(
-                                    "Admin",
-                                    "Admin",
-                                    "admin",
-                                    UserRole.USER,
-                                    passwordEncoder.encode("test")
-                            )
-                    )
-            );
+            var admin = RegisterRequest.builder()
+                    .firstname("admin")
+                    .lastname("admin")
+                    .email("admin")
+                    .password(passwordEncoder.encode("admin"))
+                    .role(UserRole.ADMIN)
+                    .build();
+            System.out.println("Admin " + admin.getEmail() + ", Token: " + service.register(admin).getAccessToken());
 
-            var ticketOwner = userRepository.findById(1L);
-            var otherUser = userRepository.findUserById(3L);
-            var includedUser = userRepository.findById(2L);
-
-            var ticket = new TicketEntity(
-                    "database migration",
-                    ticketOwner.get(),
-                    List.of(
-                            includedUser.get()
-                    ),
-                    "content",
-                    TicketStatus.OPEN,
-                    List.of(TicketCategories.DATABASE)
-            );
-
-            ticketRepository.saveAll(
-                    List.of(
-                            ticket,
-                            new TicketEntity(
-                                    "security configuration",
-                                    includedUser.get(),
-                                    List.of(
-                                            ticketOwner.get(),
-                                            otherUser.get()
-                                    ),
-                                    "content",
-                                    TicketStatus.OPEN,
-                                    List.of(TicketCategories.INFRASTRUCTURE, TicketCategories.SECURITY)
-                            ),
-                            new TicketEntity(
-                                    "security enhancement",
-                                    includedUser.get(),
-                                    List.of(
-                                            ticketOwner.get()
-                                    ),
-                                    "content",
-                                    TicketStatus.OPEN,
-                                    List.of(TicketCategories.SECURITY)
-                            )
-                    )
-            );
-
-            commentRepository.saveAll(
-                    List.of(
-                            new CommentEntity(
-                                    ticket,
-                                    ticketOwner.get(),
-                                    "need to be fixed"
-                            ),
-                            new CommentEntity(
-                                    ticket,
-                                    includedUser.get(),
-                                    "fixed"
-                            )
-                    )
-            );
-
-            userRepository.findAll().forEach(System.out::println);
-            ticketRepository.findAll().forEach(System.out::println);
-            commentRepository.findAll().forEach(System.out::println);
+            var manager = RegisterRequest.builder()
+                    .firstname("James")
+                    .lastname("King")
+                    .email("james@king.com")
+                    .password(passwordEncoder.encode("test"))
+                    .role(UserRole.MANAGER)
+                    .build();
+            System.out.println("Manager " + manager.getEmail() + ", Token: " + service.register(manager).getAccessToken());
         };
     }
 }

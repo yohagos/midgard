@@ -3,52 +3,26 @@ package com.midgard.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
 public class UserEntity implements UserDetails {
 
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
-    @Column(name = "user_id")
+    @GeneratedValue
     private Long id;
-
-    @Column(name = "firstname")
     private String firstname;
-
-    @Column(name = "lastname")
     private String lastname;
-
-    @Column(name = "email")
-    @NotBlank(message = "email is necessary")
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
     private String email;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "createdAt")
     private LocalDateTime timestamp;
 
     @Enumerated(EnumType.STRING)

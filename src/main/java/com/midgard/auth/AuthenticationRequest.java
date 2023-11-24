@@ -9,5 +9,5 @@ import lombok.*;
 public class AuthenticationRequest {
 
     private String email;
-    private String password;
+    String password;
 }
