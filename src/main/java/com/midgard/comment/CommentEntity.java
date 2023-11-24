@@ -15,20 +15,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "comments")
 public class CommentEntity {
 
     @Id
-    @SequenceGenerator(
-            name = "comment_sequence",
-            sequenceName = "comment_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "comment_sequence"
-    )
-    @Column(name = "comment_id")
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
@@ -37,12 +27,7 @@ public class CommentEntity {
     @OneToOne
     private UserEntity user;
 
-    @Column(
-            name = "content",
-            nullable = false
-    )
     private String content;
-
     private LocalDateTime timestamp;
 
     public CommentEntity(TicketEntity ticket, UserEntity user, String content) {

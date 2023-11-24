@@ -19,23 +19,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tickets")
 public class TicketEntity {
 
     @Id
-    @SequenceGenerator(
-            name = "ticket_sequence",
-            sequenceName = "ticket_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "ticket_sequence"
-    )
-    @Column(name = "ticket_id")
+    @GeneratedValue
     private Long id;
-
-    @Column(name = "title")
     private String title;
 
     @ManyToOne
@@ -44,13 +32,8 @@ public class TicketEntity {
     @ManyToMany
     private List<UserEntity> includedUsers;
 
-    @Column(name = "content_text")
     private String content;
-
-    @Column(name = "created_timestamp")
     private LocalDateTime createdAt;
-
-    @Column(name = "closed_timestamp")
     private LocalDateTime closedAt;
 
     @OneToMany
@@ -62,7 +45,6 @@ public class TicketEntity {
     @Enumerated(EnumType.STRING)
     private List<TicketCategories> categories;
 
-    @Column(name = "priority")
     private String priority;
 
 
