@@ -35,7 +35,6 @@ public class AuthenticationService {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
     public AuthenticationResponse register(RegisterRequest request) {
-        log.error(request.toString());
         UserRole role = UserRole.USER;
         var user = UserEntity.builder()
                 .firstname(request.getFirstname())
