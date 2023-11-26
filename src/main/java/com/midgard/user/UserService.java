@@ -2,12 +2,11 @@ package com.midgard.user;
 
 
 import com.midgard.configs.JwtService;
+import com.midgard.user.responses.UserResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -52,12 +51,18 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserEntity findUserByEmail(String email) {
-        var optionalUser = userRepository.findUserByEmail(email);
-        System.out.println(optionalUser);
+    public UserResponses findUserByEmail(String request) {
+        var optionalUser = userRepository.findUserByEmail(request);
+
         if (!optionalUser.isPresent())
-            throw new IllegalArgumentException("No user has the email " + email);
-        return optionalUser.get();
+            throw new IllegalArgumentException("No user has the email " + request);
+        return new UserResponses(
+                optionalUser.get().getId(),
+                optionalUser.get().getEmail(),
+                optionalUser.get().getFirstname(),
+                optionalUser.get().getLastname(),
+                optionalUser.get().getRole()
+        );
     }
 
     public List<UserEntity> findUsersByName(String name) {

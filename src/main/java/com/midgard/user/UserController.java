@@ -2,16 +2,17 @@ package com.midgard.user;
 
 import com.midgard.token.Token;
 import com.midgard.token.TokenRepository;
+import com.midgard.user.responses.UserResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "api/v1/user")
 @RequiredArgsConstructor
@@ -23,31 +24,21 @@ public class UserController {
     private final TokenRepository tokenRepository;
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('user:read')")
     public List<UserEntity> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping(params = "name")
-    @PreAuthorize("hasAuthority('user:read')")
-    public List<UserEntity> getUserByName(
-            @RequestParam("name") String name
+    @GetMapping("/{email}")
+    public ResponseEntity<UserResponses> getUserByEmail(
+            @PathVariable(value = "email") String request
     ) {
-        return userService.findUsersByName(name);
-    }
-
-    @GetMapping(params = "email")
-    @PreAuthorize("hasAuthority('user:read')")
-    public UserEntity getUserByEmail(
-            @RequestParam("email") String email
-    ) {
-        return userService.findUserByEmail(email);
+        log.error(request.toString());
+        return ResponseEntity.ok(userService.findUserByEmail(request));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('user:delete')")
     public void deleteUserById(
-            @PathVariable Long id
+            @PathVariable(value = "id") Long id
     ) {
         userService.deleteUser(id);
     }
@@ -62,7 +53,6 @@ public class UserController {
     }
 
     @PutMapping("/permission")
-    @PreAuthorize("hasAuthority('user:put')")
     public ResponseEntity<UserPermissionResponse> updateUserPermissions(
             @RequestBody UserPermissionRequest request
     ) {
@@ -70,7 +60,6 @@ public class UserController {
     }
 
     @GetMapping("/token")
-    @PreAuthorize("hasAuthority('user:read')")
     public List<Token> getTokens() {
         var tokens = tokenRepository.findAll();
         log.info(tokens.toString());
