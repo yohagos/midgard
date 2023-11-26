@@ -72,6 +72,7 @@ public class AuthenticationService {
                 .builder()
                 .accessToken(jwtToken)
                     .refreshToken(refreshToken)
+                    .email(request.getEmail())
                 .build();
     }
 
