@@ -1,4 +1,4 @@
-package com.midgard.ticket;
+package com.midgard.ticket.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketPriorityResponse {
-
-    private boolean updated;
+public class TicketCategoriesResponse {
+    private boolean update;
     private Long ticket_id;
 }

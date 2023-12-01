@@ -1,4 +1,4 @@
-package com.midgard.ticket;
+package com.midgard.ticket.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketStatusRequest {
+public class TicketCreateResponse {
 
-    private String currentStatus;
-    private String changeTo;
-    private Long ticket_id;
+    private Long id;
+    private String title;
 }

@@ -1,6 +1,10 @@
 package com.midgard.ticket;
 
-import com.midgard.user.UserEntity;
+import com.midgard.ticket.requests.*;
+import com.midgard.ticket.responses.TicketCategoriesResponse;
+import com.midgard.ticket.responses.TicketPriorityResponse;
+import com.midgard.ticket.responses.TicketStatusResponse;
+import com.midgard.ticket.responses.TicketUpdateResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "api/v1/ticket")
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class TicketController {
 
     @GetMapping("")
     public List<TicketEntity> getAllTickets() {
+        log.warn(ticketService.getAllTickets().toString());
         return ticketService.getAllTickets();
     }
 
@@ -29,6 +35,13 @@ public class TicketController {
             @PathVariable Long id
     ) {
         return ticketService.findTicketById(id);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addTicket(
+            @RequestBody TicketCreateRequest request
+    ) {
+        return ResponseEntity.ok(ticketService.createTicket(request));
     }
 
     @GetMapping(params = "email")
