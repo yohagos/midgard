@@ -1,18 +1,16 @@
-package com.midgard.ticket;
+package com.midgard.ticket.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketCategoriesRequest {
+public class TicketPriorityResponse {
 
+    private boolean updated;
     private Long ticket_id;
-    private List<TicketCategories> categories;
 }

@@ -1,6 +1,8 @@
 package com.midgard.ticket;
 
 import com.midgard.configs.JwtService;
+import com.midgard.ticket.requests.*;
+import com.midgard.ticket.responses.*;
 import com.midgard.user.UserRepository;
 import com.midgard.util.TokenUtil;
 import jakarta.transaction.Transactional;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -175,5 +176,24 @@ public class TicketService implements TokenUtil {
         ticket.get().setPriority(request.getPriority().toString());
 
         return new TicketPriorityResponse(true, request.getTicket_id());
+    }
+
+    public TicketCreateResponse createTicket(TicketCreateRequest request) {
+        var optionalOwner = userRepository.findUserByEmail(request.getOwnerEmail()).orElseThrow();
+        var ticket = ticketRepository.save(
+                new TicketEntity(
+                        request.getTitle(),
+                        optionalOwner,
+                        request.getIncludedUsers(),
+                        request.getContent(),
+                        TicketStatus.OPEN,
+                        request.getCategories()
+                )
+        );
+
+        return new TicketCreateResponse(
+                ticket.getId(),
+                ticket.getTitle()
+        );
     }
 }

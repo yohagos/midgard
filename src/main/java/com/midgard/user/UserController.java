@@ -32,7 +32,6 @@ public class UserController {
     public ResponseEntity<UserResponses> getUserByEmail(
             @PathVariable(value = "email") String request
     ) {
-        log.error(request.toString());
         return ResponseEntity.ok(userService.findUserByEmail(request));
     }
 
@@ -62,7 +61,6 @@ public class UserController {
     @GetMapping("/token")
     public List<Token> getTokens() {
         var tokens = tokenRepository.findAll();
-        log.info(tokens.toString());
         return tokens;
     }
 }
