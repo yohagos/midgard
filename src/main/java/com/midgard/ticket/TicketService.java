@@ -173,14 +173,14 @@ public class TicketService implements TokenUtil {
         var ticket = ticketRepository.findById(request.getTicket_id());
         if (!ticket.isPresent())
             throw new IllegalStateException("Can not find ticket id " + request.getTicket_id());
-        ticket.get().setPriority(request.getPriority().toString());
+        ticket.get().setPriority(request.getPriority());
 
         return new TicketPriorityResponse(true, request.getTicket_id());
     }
 
     public TicketCreateResponse createTicket(TicketCreateRequest request) {
         var optionalOwner = userRepository.findUserByEmail(request.getOwnerEmail()).orElseThrow();
-        var ticket = ticketRepository.save(
+        /*var ticket = ticketRepository.save(
                 new TicketEntity(
                         request.getTitle(),
                         optionalOwner,
@@ -189,11 +189,18 @@ public class TicketService implements TokenUtil {
                         TicketStatus.OPEN,
                         request.getCategories()
                 )
-        );
-
+        );*/
+        var ticket = new TicketEntity();
+        ticket.setTitle(request.getTitle());
+        ticket.setOwner(optionalOwner);
+        //ticket.setIncludedUsers(request.getIncludedUsers());
+        ticket.setContent(request.getContent());
+        ticket.setStatus(TicketStatus.OPEN);
+        //ticket.setCategories(request.getCategories());
+        var saved = ticketRepository.save(ticket);
         return new TicketCreateResponse(
-                ticket.getId(),
-                ticket.getTitle()
+                saved.getId(),
+                saved.getTitle()
         );
     }
 }

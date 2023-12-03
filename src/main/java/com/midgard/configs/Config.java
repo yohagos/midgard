@@ -4,10 +4,7 @@ import com.midgard.auth.AuthenticationService;
 import com.midgard.auth.RegisterRequest;
 import com.midgard.comment.CommentEntity;
 import com.midgard.comment.CommentRepository;
-import com.midgard.ticket.TicketCategories;
-import com.midgard.ticket.TicketEntity;
-import com.midgard.ticket.TicketRepository;
-import com.midgard.ticket.TicketStatus;
+import com.midgard.ticket.*;
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
 import com.midgard.user.UserRole;
@@ -70,48 +67,39 @@ public class Config {
             var userEntity = userRepository.findUserByEmail(user1.getEmail()).orElseThrow();
             var user2Entity = userRepository.findUserByEmail(user2.getEmail()).orElseThrow();
 
-            var ticketDatabaseIntegration = new TicketEntity(
-                    "Database intigration",
-                    managerEntity,
-                    List.of(
-                            userEntity
-                    ),
-                    "Database needs to be ....",
-                    TicketStatus.OPEN,
-                    List.of(TicketCategories.DATABASE)
-            );
+            var ticketDatabaseIntegration = new TicketEntity();
+            ticketDatabaseIntegration.setTitle("Database integration");
+            ticketDatabaseIntegration.setOwner(managerEntity);
+            ticketDatabaseIntegration.setIncludedUsers(List.of(userEntity));
+            ticketDatabaseIntegration.setContent("Database needs to be ....");
+            ticketDatabaseIntegration.setStatus(TicketStatus.OPEN);
+            ticketDatabaseIntegration.setCategories(List.of(TicketCategories.DATABASE));
 
-            var ticketDatabaseConfiguration = new TicketEntity(
-                    "Database configuration",
-                    adminEntity,
-                    List.of(
-                            user2Entity
-                    ),
-                    "Database configuration needs to be ....",
-                    TicketStatus.IMPLEMENTING,
-                    List.of(TicketCategories.DATABASE, TicketCategories.SECURITY)
-            );
-            var ticketFirewallUpgrade = new TicketEntity(
-                    "Firewall upgrade",
-                    adminEntity,
-                    List.of(
-                            userEntity
-                    ),
-                    "Firewall needs to be ....",
-                    TicketStatus.OPEN,
-                    List.of(TicketCategories.DATABASE)
-            );
+            var ticketDatabaseConfiguration = new TicketEntity();
+            ticketDatabaseConfiguration.setTitle("Database configuration");
+            ticketDatabaseConfiguration.setOwner(adminEntity);
+            ticketDatabaseConfiguration.setIncludedUsers(List.of(user2Entity));
+            ticketDatabaseConfiguration.setContent("Database configuration needs to be ....");
+            ticketDatabaseConfiguration.setStatus(TicketStatus.IMPLEMENTING);
+            ticketDatabaseConfiguration.setCategories(List.of(TicketCategories.DATABASE, TicketCategories.SECURITY));
 
-            var ticketAngularUpgrade = new TicketEntity(
-                    "Angular upgrade",
-                    adminEntity,
-                    List.of(
-                            user2Entity
-                    ),
-                    "Database configuration needs to be ....",
-                    TicketStatus.IMPLEMENTING,
-                    List.of(TicketCategories.DATABASE, TicketCategories.SECURITY)
-            );
+
+            var ticketFirewallUpgrade = new TicketEntity();
+            ticketFirewallUpgrade.setTitle("Firewall upgrade");
+            ticketFirewallUpgrade.setOwner(adminEntity);
+            ticketFirewallUpgrade.setIncludedUsers(List.of(userEntity));
+            ticketFirewallUpgrade.setContent("Firewall needs to be ....");
+            ticketFirewallUpgrade.setStatus(TicketStatus.OPEN);
+            ticketFirewallUpgrade.setCategories(List.of(TicketCategories.DATABASE));
+
+
+            var ticketAngularUpgrade = new TicketEntity();
+            ticketAngularUpgrade.setTitle("Angular upgrade");
+            ticketAngularUpgrade.setOwner(adminEntity);
+            ticketAngularUpgrade.setIncludedUsers(List.of(user2Entity));
+            ticketAngularUpgrade.setContent("Database configuration needs to be ....");
+            ticketAngularUpgrade.setStatus(TicketStatus.IMPLEMENTING);
+            ticketAngularUpgrade.setCategories(List.of(TicketCategories.DATABASE, TicketCategories.SECURITY));
 
             ticketRepository.saveAll(
                     List.of(
@@ -123,7 +111,7 @@ public class Config {
             );
 
             var ticketDBINT = ticketRepository.findById(2L).orElseThrow();
-            ticketDBINT.setPriority("SEMI_HIGH");
+            ticketDBINT.setPriority(TicketPriority.SEMI_HIGH);
             ticketRepository.save(ticketDBINT);
         };
     }
