@@ -3,8 +3,10 @@ package com.midgard.ticket;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
+
 @RequiredArgsConstructor
-public enum TicketPriority {
+public enum TicketPriority implements Serializable {
 
     LOW("LOW"),
     SEMI_LOW("SEMI_LOW"),

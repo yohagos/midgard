@@ -1,12 +1,19 @@
 package com.midgard.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.midgard.configs.GrantedAuthoritySerializer;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @Data
@@ -14,7 +21,8 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserEntity implements UserDetails {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserEntity implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue
@@ -38,7 +46,13 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (var role: role.getAuthorities()) {
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getAuthority());
+            authorities.add(authority);
+        }
+
+        return authorities;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.midgard.ticket;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.midgard.comment.CommentEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
@@ -7,19 +8,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.EntityGraph;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TicketEntity {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TicketEntity implements Serializable {
 
     @Id
     @GeneratedValue
@@ -45,8 +45,8 @@ public class TicketEntity {
     @Enumerated(EnumType.STRING)
     private List<TicketCategories> categories;
 
-    private String priority;
-
+    @Enumerated(EnumType.STRING)
+    private TicketPriority priority;
 
     public TicketEntity(
             String title,
@@ -54,15 +54,17 @@ public class TicketEntity {
             List<UserEntity> includedUsers,
             String content,
             TicketStatus status,
-            List<TicketCategories> categories
+            List<TicketCategories> categories,
+            TicketPriority priority
     ) {
         this.title = title;
         this.owner = owner;
         this.includedUsers = includedUsers;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
         this.status = status;
         this.categories = categories;
+        this.createdAt = LocalDateTime.now();
+        this.priority = priority;
     }
 
     @Override
