@@ -68,12 +68,12 @@ public class CommentService implements TokenUtil {
     }
 
     public CommentResponse editComment(CommentEditRequest request) {
-        var username = getCurrentUsername();
+        var user = userRepository.findUserByEmail(request.getUser_email()).orElseThrow();
         var optionalComment = commentRepository.findById(request.getComment_id());
         if (!optionalComment.isPresent())
             throw new IllegalStateException("Could not find comment");
         var newComment = optionalComment.get();
-        if (!newComment.getUser().getUsername().equals(username))
+        if (!newComment.getUser().getUsername().equals(user))
             throw new IllegalStateException("Current user cannot edit the comment");
 
         newComment.setContent(request.getContent());
@@ -81,7 +81,7 @@ public class CommentService implements TokenUtil {
         commentRepository.save(newComment);
         return new CommentResponse(
                 LocalDateTime.now(),
-                username,
+                user.getUsername(),
                 newComment.getContent(),
                 true
         );
@@ -92,5 +92,11 @@ public class CommentService implements TokenUtil {
         if (optionalComments.isEmpty())
             return List.of();
         return optionalComments;
+    }
+
+    public void deleteComment(Long id) {
+        var optionalComment = commentRepository.findById(id).orElseThrow();
+        log.info(optionalComment.toString());
+        commentRepository.deleteById(id);
     }
 }
