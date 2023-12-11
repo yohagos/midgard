@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class CommentEditRequest {
 
     private String content;
-    private Long ticket_id;
+    private String user_email;
     private Long comment_id;
 }

@@ -51,4 +51,12 @@ public class CommentController {
     ) {
         return commentService.findCommentsForTicket(ticket_id);
     }
+
+    @DeleteMapping("/delete/{comment_id}")
+    public ResponseEntity<?> deleteComment(
+            @PathVariable("comment_id") Long id
+    ) {
+        commentService.deleteComment(id);
+        return ResponseEntity.ok().build();
+    }
 }
