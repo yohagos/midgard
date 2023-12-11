@@ -3,23 +3,16 @@ package com.midgard.comment;
 import com.midgard.configs.JwtService;
 import com.midgard.ticket.TicketRepository;
 import com.midgard.user.UserRepository;
-import com.midgard.util.TokenUtil;
-import lombok.Builder;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService implements TokenUtil {
+public class CommentService {
 
     private final CommentRepository commentRepository;
     private final TicketRepository ticketRepository;
@@ -39,12 +32,12 @@ public class CommentService implements TokenUtil {
         return optionalComment.get();
     }
 
-    @Override
+    /*@Override
     public String getCurrentUsername() {
         var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         var header = request.getHeader("Authorization").split(" ")[1];
         return jwtService.extractUsername(header);
-    }
+    }*/
 
     public CommentResponse addNewComment(CommentRequest newComment) {
         var user = userRepository.findUserByEmail(newComment.getUserEmail()).orElseThrow();
