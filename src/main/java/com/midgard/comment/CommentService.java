@@ -47,22 +47,21 @@ public class CommentService implements TokenUtil {
     }
 
     public CommentResponse addNewComment(CommentRequest newComment) {
-        var username = getCurrentUsername();
+        var user = userRepository.findUserByEmail(newComment.getUserEmail()).orElseThrow();
 
         var ticket = ticketRepository.findById(newComment.getTicket_id());
         if (!ticket.isPresent())
             throw new IllegalStateException("Can not find ticket with id " + newComment.getTicket_id());
-        var user = userRepository.findUserByEmail(username);
-        if (!user.isPresent())
-            throw new IllegalStateException("Can not find user by email " + username);
+
         var comment = new CommentEntity();
         comment.setContent(newComment.getContent());
-        comment.setUser(user.get());
+        comment.setUser(user);
         comment.setTicket(ticket.get());
         commentRepository.save(comment);
+        log.info(comment.toString());
         return new CommentResponse(
                 LocalDateTime.now(),
-                username,
+                user.getUsername(),
                 newComment.getContent(),
                 true
         );

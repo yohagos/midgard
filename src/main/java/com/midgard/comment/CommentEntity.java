@@ -24,7 +24,7 @@ public class CommentEntity {
     @ManyToOne
     private TicketEntity ticket;
 
-    @OneToOne
+    @ManyToOne
     private UserEntity user;
 
     private String content;

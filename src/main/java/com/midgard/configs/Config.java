@@ -27,7 +27,8 @@ public class Config {
     CommandLineRunner commandLineRunner(
             AuthenticationService service,
             TicketRepository ticketRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            CommentRepository commentRepository
     ) {
         return args -> {
             var admin = RegisterRequest.builder()
@@ -113,6 +114,32 @@ public class Config {
             var ticketDBINT = ticketRepository.findById(2L).orElseThrow();
             ticketDBINT.setPriority(TicketPriority.SEMI_HIGH);
             ticketRepository.save(ticketDBINT);
+
+            var commentOne = new CommentEntity();
+            commentOne.setTicket(ticketDBINT);
+            commentOne.setUser(managerEntity);
+            commentOne.setContent("How much more time do you need?");
+
+            var commentTwo = new CommentEntity();
+            commentTwo.setTicket(ticketDBINT);
+            commentTwo.setUser(userEntity);
+            commentTwo.setContent("Do you make progress?");
+
+            var commentThree = new CommentEntity();
+            commentThree.setTicket(ticketDBINT);
+            commentThree.setUser(userEntity);
+            commentThree.setContent("I need some help");
+
+            var commentFour = new CommentEntity();
+            commentFour.setTicket(ticketDBINT);
+            commentFour.setUser(managerEntity);
+            commentFour.setContent("How can I help you?");
+
+            commentRepository.saveAll(
+                    List.of(
+                            commentOne, commentTwo, commentThree, commentFour
+                    )
+            );
         };
     }
 }

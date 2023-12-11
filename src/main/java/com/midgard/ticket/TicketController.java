@@ -37,7 +37,6 @@ public class TicketController {
     public ResponseEntity<TicketCreateResponse> addTicket(
             @RequestBody TicketCreateRequest request
     ) {
-        log.info(request.toString());
         return ResponseEntity.ok(ticketService.createTicket(request));
     }
 

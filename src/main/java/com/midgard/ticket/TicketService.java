@@ -74,11 +74,11 @@ public class TicketService implements TokenUtil {
                                 || !title.contentEquals(ticket.getTitle())
                 )
                 .ifPresent(ticket::setTitle);
-        Optional.ofNullable(request.getComments())
+        Optional.ofNullable(request.getCategories())
                 .filter(
-                        comment -> !comment.isEmpty()
+                        categories -> categories.isEmpty()
                 )
-                .ifPresent(ticket::setComments);
+                .ifPresent(ticket::setCategories);
         Optional.ofNullable(request.getOwnerUser())
                 .filter(
                         user -> !user.equals(
@@ -91,6 +91,8 @@ public class TicketService implements TokenUtil {
                         users -> !users.isEmpty()
                 )
                 .ifPresent(ticket.getIncludedUsers()::addAll);
+        Optional.ofNullable(request.getPriority())
+                .ifPresent(ticket::setPriority);
         ticketRepository.save(ticket);
         return TicketUpdateResponse.builder().response("updated successfully").build();
     }
@@ -124,8 +126,6 @@ public class TicketService implements TokenUtil {
             throw new IllegalStateException("Cannot find user by " + getCurrentUsername() + " or ticket cannot be found id " + request.getTicket_id());
         var ticket = optionalTicket.get();
         var user = requestUser.get();
-        if (ticket.getStatus().equals(TicketStatus.CLOSED))
-            throw new IllegalStateException("Ticket already closed. Please create a new ticket to continue");
 
         switch (request.getChangeTo()) {
             case "IMPLEMENTING":
@@ -139,7 +139,6 @@ public class TicketService implements TokenUtil {
                 break;
             default:
                 break;
-
         }
 
         ticketRepository.save(ticket);

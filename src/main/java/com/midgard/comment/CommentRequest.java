@@ -13,4 +13,5 @@ public class CommentRequest {
 
     private String content;
     private Long ticket_id;
+    private String userEmail;
 }
