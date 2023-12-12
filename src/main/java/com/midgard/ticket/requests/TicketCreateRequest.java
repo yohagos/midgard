@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -24,6 +25,7 @@ public class TicketCreateRequest {
     private String content;
     private List<TicketCategories> categories;
     private TicketPriority priority;
+    private LocalDateTime deadline;
 
     public void setIncludedUsers(List<UserEntity> users) {
         this.includedUsers = users;

@@ -93,6 +93,8 @@ public class TicketService implements TokenUtil {
                 .ifPresent(ticket.getIncludedUsers()::addAll);
         Optional.ofNullable(request.getPriority())
                 .ifPresent(ticket::setPriority);
+        Optional.ofNullable(request.getDeadline())
+                        .ifPresent(ticket::setDeadline);
         ticketRepository.save(ticket);
         return TicketUpdateResponse.builder().response("updated successfully").build();
     }
@@ -187,6 +189,7 @@ public class TicketService implements TokenUtil {
         ticket.setContent(request.getContent());
         ticket.setStatus(TicketStatus.OPEN);
         ticket.setCategories(request.getCategories());
+        ticket.setDeadline(request.getDeadline());
         var saved = ticketRepository.save(ticket);
         return new TicketCreateResponse(
                 saved.getId(),
