@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +82,7 @@ public class CommentService {
     }
 
     public List<CommentEntity> findCommentsForTicket(Long ticketId) {
-        var optionalComments = commentRepository.findAll().stream().filter(commentEntity -> commentEntity.getTicket().getId() == ticketId).toList();
+        var optionalComments = commentRepository.findAll().stream().filter(commentEntity -> Objects.equals(commentEntity.getTicket().getId(), ticketId)).toList();
         if (optionalComments.isEmpty())
             return List.of();
         return optionalComments;
@@ -89,7 +90,6 @@ public class CommentService {
 
     public void deleteComment(Long id) {
         var optionalComment = commentRepository.findById(id).orElseThrow();
-        log.info(optionalComment.toString());
         commentRepository.deleteById(id);
     }
 }

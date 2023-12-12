@@ -2,6 +2,7 @@ package com.midgard.ticket;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.midgard.comment.CommentEntity;
+import com.midgard.files.FilesEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,8 +37,11 @@ public class TicketEntity implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime closedAt;
 
-    @OneToMany
+    @ManyToMany
     private List<CommentEntity> comments;
+
+    @ManyToMany
+    private List<FilesEntity> files;
 
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
