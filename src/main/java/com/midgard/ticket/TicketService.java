@@ -179,23 +179,14 @@ public class TicketService implements TokenUtil {
 
     public TicketCreateResponse createTicket(TicketCreateRequest request) {
         var optionalOwner = userRepository.findUserByEmail(request.getOwnerEmail()).orElseThrow();
-        /*var ticket = ticketRepository.save(
-                new TicketEntity(
-                        request.getTitle(),
-                        optionalOwner,
-                        request.getIncludedUsers(),
-                        request.getContent(),
-                        TicketStatus.OPEN,
-                        request.getCategories()
-                )
-        );*/
+
         var ticket = new TicketEntity();
         ticket.setTitle(request.getTitle());
         ticket.setOwner(optionalOwner);
-        //ticket.setIncludedUsers(request.getIncludedUsers());
+        ticket.setIncludedUsers(request.getIncludedUsers());
         ticket.setContent(request.getContent());
         ticket.setStatus(TicketStatus.OPEN);
-        //ticket.setCategories(request.getCategories());
+        ticket.setCategories(request.getCategories());
         var saved = ticketRepository.save(ticket);
         return new TicketCreateResponse(
                 saved.getId(),

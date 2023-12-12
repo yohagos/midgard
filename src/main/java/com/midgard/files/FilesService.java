@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +47,16 @@ public class FilesService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<FilesEntity> getFilesForTicket(Long ticketId) {
+        return filesRepository.findAll()
+                .stream()
+                .filter(file -> Objects.equals(file.getTicket_id(), ticketId))
+                .toList();
+    }
+
+    public FilesEntity getDownLoadFile(Long id) {
+        return filesRepository.findById(id).orElseThrow();
     }
 }

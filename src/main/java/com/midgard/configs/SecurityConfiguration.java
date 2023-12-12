@@ -29,6 +29,7 @@ public class SecurityConfiguration {
             "/api/v1/ticket/**",
             "/api/v1/comment/**",
             "/api/v1/files/**",
+            "/api/v1/download/**",
             "/api/v2/api-docs",
             "/api/v3/api-docs",
             "/api/v4/api-docs/**",
