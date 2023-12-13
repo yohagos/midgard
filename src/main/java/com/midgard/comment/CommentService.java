@@ -51,6 +51,7 @@ public class CommentService {
         comment.setContent(newComment.getContent());
         comment.setUser(user);
         comment.setTicket(ticket.get());
+        comment.setTimestamp(LocalDateTime.now());
         commentRepository.save(comment);
         log.info(comment.toString());
         return new CommentResponse(
