@@ -1,5 +1,7 @@
 package com.midgard.comment;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.midgard.ticket.TicketEntity;
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
@@ -8,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,7 +18,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class CommentEntity {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CommentEntity  implements Serializable {
 
     @Id
     @GeneratedValue
@@ -24,7 +28,7 @@ public class CommentEntity {
     @ManyToOne
     private TicketEntity ticket;
 
-    @OneToOne
+    @ManyToOne
     private UserEntity user;
 
     private String content;

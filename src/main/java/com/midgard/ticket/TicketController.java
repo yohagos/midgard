@@ -1,6 +1,8 @@
 package com.midgard.ticket;
 
-import com.midgard.user.UserEntity;
+import com.midgard.ticket.requests.*;
+import com.midgard.ticket.responses.*;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@RequestMapping(path = "api/v1/ticket")
+@RequestMapping("api/v1/ticket")
 @RequiredArgsConstructor
 public class TicketController {
 
@@ -31,11 +34,11 @@ public class TicketController {
         return ticketService.findTicketById(id);
     }
 
-    @GetMapping(params = "email")
-    public List<TicketEntity> findTicketByOwner(
-            @RequestParam String email
+    @PostMapping("/add")
+    public ResponseEntity<TicketCreateResponse> addTicket(
+            @RequestBody TicketCreateRequest request
     ) {
-        return ticketService.findTicketByOwner(email);
+        return ResponseEntity.ok(ticketService.createTicket(request));
     }
 
     @GetMapping(params = "title")

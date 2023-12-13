@@ -1,6 +1,8 @@
 package com.midgard.ticket;
 
 import com.midgard.configs.JwtService;
+import com.midgard.ticket.requests.*;
+import com.midgard.ticket.responses.*;
 import com.midgard.user.UserRepository;
 import com.midgard.util.TokenUtil;
 import jakarta.transaction.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,11 +75,13 @@ public class TicketService implements TokenUtil {
                                 || !title.contentEquals(ticket.getTitle())
                 )
                 .ifPresent(ticket::setTitle);
-        Optional.ofNullable(request.getComments())
+      
+        Optional.ofNullable(request.getCategories())
                 .filter(
-                        comment -> !comment.isEmpty()
+                        categories -> categories.isEmpty()
                 )
-                .ifPresent(ticket::setComments);
+                .ifPresent(ticket::setCategories);
+
         Optional.ofNullable(request.getOwnerUser())
                 .filter(
                         user -> !user.equals(
@@ -85,11 +89,18 @@ public class TicketService implements TokenUtil {
                         )
                 )
                 .ifPresent(ticket::setOwner);
+      
         Optional.ofNullable(request.getIncludedUsers())
                 .filter(
                         users -> !users.isEmpty()
                 )
                 .ifPresent(ticket.getIncludedUsers()::addAll);
+
+        Optional.ofNullable(request.getPriority())
+                .ifPresent(ticket::setPriority);
+        Optional.ofNullable(request.getDeadline())
+                        .ifPresent(ticket::setDeadline);
+
         ticketRepository.save(ticket);
         return TicketUpdateResponse.builder().response("updated successfully").build();
     }
@@ -123,8 +134,6 @@ public class TicketService implements TokenUtil {
             throw new IllegalStateException("Cannot find user by " + getCurrentUsername() + " or ticket cannot be found id " + request.getTicket_id());
         var ticket = optionalTicket.get();
         var user = requestUser.get();
-        if (ticket.getStatus().equals(TicketStatus.CLOSED))
-            throw new IllegalStateException("Ticket already closed. Please create a new ticket to continue");
 
         switch (request.getChangeTo()) {
             case "IMPLEMENTING":
@@ -138,7 +147,6 @@ public class TicketService implements TokenUtil {
                 break;
             default:
                 break;
-
         }
 
         ticketRepository.save(ticket);
@@ -172,8 +180,28 @@ public class TicketService implements TokenUtil {
         var ticket = ticketRepository.findById(request.getTicket_id());
         if (!ticket.isPresent())
             throw new IllegalStateException("Can not find ticket id " + request.getTicket_id());
-        ticket.get().setPriority(request.getPriority().toString());
+        ticket.get().setPriority(request.getPriority());
 
         return new TicketPriorityResponse(true, request.getTicket_id());
+    }
+
+    public TicketCreateResponse createTicket(TicketCreateRequest request) {
+        var optionalOwner = userRepository.findUserByEmail(request.getOwnerEmail()).orElseThrow();
+
+        var ticket = new TicketEntity();
+        ticket.setTitle(request.getTitle());
+        ticket.setOwner(optionalOwner);
+        ticket.setIncludedUsers(request.getIncludedUsers());
+        ticket.setContent(request.getContent());
+        ticket.setStatus(TicketStatus.OPEN);
+        ticket.setCategories(request.getCategories());
+        ticket.setPriority(request.getPriority());
+        ticket.setCreatedAt(LocalDateTime.now());
+        ticket.setDeadline(request.getDeadline());
+        var saved = ticketRepository.save(ticket);
+        return new TicketCreateResponse(
+                saved.getId(),
+                saved.getTitle()
+        );
     }
 }

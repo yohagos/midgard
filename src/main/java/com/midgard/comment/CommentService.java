@@ -3,23 +3,18 @@ package com.midgard.comment;
 import com.midgard.configs.JwtService;
 import com.midgard.ticket.TicketRepository;
 import com.midgard.user.UserRepository;
-import com.midgard.util.TokenUtil;
-import lombok.Builder;
-import lombok.Data;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService implements TokenUtil {
+public class CommentService {
 
     private final CommentRepository commentRepository;
     private final TicketRepository ticketRepository;
@@ -39,6 +34,7 @@ public class CommentService implements TokenUtil {
         return optionalComment.get();
     }
 
+
     @Override
     public String getCurrentUsername() {
         var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -47,34 +43,36 @@ public class CommentService implements TokenUtil {
     }
 
     public CommentResponse addNewComment(CommentRequest newComment) {
-        var username = getCurrentUsername();
+        var user = userRepository.findUserByEmail(newComment.getUserEmail()).orElseThrow();
+
 
         var ticket = ticketRepository.findById(newComment.getTicket_id());
         if (!ticket.isPresent())
             throw new IllegalStateException("Can not find ticket with id " + newComment.getTicket_id());
-        var user = userRepository.findUserByEmail(username);
-        if (!user.isPresent())
-            throw new IllegalStateException("Can not find user by email " + username);
+
         var comment = new CommentEntity();
         comment.setContent(newComment.getContent());
-        comment.setUser(user.get());
+        comment.setUser(user);
         comment.setTicket(ticket.get());
+        comment.setTimestamp(LocalDateTime.now());
         commentRepository.save(comment);
+        log.info(comment.toString());
         return new CommentResponse(
                 LocalDateTime.now(),
-                username,
+                user.getUsername(),
                 newComment.getContent(),
                 true
         );
     }
 
     public CommentResponse editComment(CommentEditRequest request) {
-        var username = getCurrentUsername();
+        var user = userRepository.findUserByEmail(request.getUser_email()).orElseThrow();
         var optionalComment = commentRepository.findById(request.getComment_id());
         if (!optionalComment.isPresent())
             throw new IllegalStateException("Could not find comment");
         var newComment = optionalComment.get();
-        if (!newComment.getUser().getUsername().equals(username))
+
+        if (!newComment.getUser().getUsername().equals(user))
             throw new IllegalStateException("Current user cannot edit the comment");
 
         newComment.setContent(request.getContent());
@@ -82,16 +80,22 @@ public class CommentService implements TokenUtil {
         commentRepository.save(newComment);
         return new CommentResponse(
                 LocalDateTime.now(),
-                username,
+                user.getUsername(),
                 newComment.getContent(),
                 true
         );
     }
 
     public List<CommentEntity> findCommentsForTicket(Long ticketId) {
-        var optionalComments = commentRepository.findAll().stream().filter(commentEntity -> commentEntity.getTicket().getId() == ticketId).toList();
+        var optionalComments = commentRepository.findAll().stream().filter(commentEntity -> Objects.equals(commentEntity.getTicket().getId(), ticketId)).toList();
         if (optionalComments.isEmpty())
             return List.of();
         return optionalComments;
     }
+
+    public void deleteComment(Long id) {
+        var optionalComment = commentRepository.findById(id).orElseThrow();
+        commentRepository.deleteById(id);
+    }
+
 }
