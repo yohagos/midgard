@@ -8,6 +8,7 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public enum TicketPriority implements Serializable {
 
+
     LOW("LOW"),
     SEMI_LOW("SEMI_LOW"),
     MEDIUM("MEDIUM"),

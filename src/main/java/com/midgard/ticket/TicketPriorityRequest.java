@@ -1,4 +1,4 @@
-package com.midgard.comment;
+package com.midgard.ticket;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentRequest {
+public class TicketPriorityRequest {
 
-    private String content;
     private Long ticket_id;
-    private String userEmail;
-  
+    private TicketPriority priority;
 }

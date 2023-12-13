@@ -3,6 +3,7 @@ package com.midgard.comment;
 import com.midgard.configs.JwtService;
 import com.midgard.ticket.TicketRepository;
 import com.midgard.user.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +34,17 @@ public class CommentService {
         return optionalComment.get();
     }
 
-    /*@Override
+
+    @Override
     public String getCurrentUsername() {
         var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         var header = request.getHeader("Authorization").split(" ")[1];
         return jwtService.extractUsername(header);
-    }*/
+    }
 
     public CommentResponse addNewComment(CommentRequest newComment) {
         var user = userRepository.findUserByEmail(newComment.getUserEmail()).orElseThrow();
+
 
         var ticket = ticketRepository.findById(newComment.getTicket_id());
         if (!ticket.isPresent())
@@ -68,6 +71,7 @@ public class CommentService {
         if (!optionalComment.isPresent())
             throw new IllegalStateException("Could not find comment");
         var newComment = optionalComment.get();
+
         if (!newComment.getUser().getUsername().equals(user))
             throw new IllegalStateException("Current user cannot edit the comment");
 
@@ -93,4 +97,5 @@ public class CommentService {
         var optionalComment = commentRepository.findById(id).orElseThrow();
         commentRepository.deleteById(id);
     }
+
 }

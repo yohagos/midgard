@@ -51,6 +51,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+
     public UserResponses findUserByEmail(String request) {
         var optionalUser = userRepository.findUserByEmail(request);
 

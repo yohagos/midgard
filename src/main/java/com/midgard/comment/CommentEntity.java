@@ -1,5 +1,6 @@
 package com.midgard.comment;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.midgard.ticket.TicketEntity;
 import com.midgard.user.UserEntity;

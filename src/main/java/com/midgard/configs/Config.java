@@ -4,6 +4,7 @@ import com.midgard.auth.AuthenticationService;
 import com.midgard.auth.RegisterRequest;
 import com.midgard.comment.CommentEntity;
 import com.midgard.comment.CommentRepository;
+
 import com.midgard.ticket.*;
 import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
@@ -140,6 +141,7 @@ public class Config {
                             commentOne, commentTwo, commentThree, commentFour
                     )
             );
+
         };
     }
 }

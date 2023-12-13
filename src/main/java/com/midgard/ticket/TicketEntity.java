@@ -1,8 +1,10 @@
 package com.midgard.ticket;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.midgard.comment.CommentEntity;
 import com.midgard.files.FilesEntity;
+
 import com.midgard.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Data
 @Builder

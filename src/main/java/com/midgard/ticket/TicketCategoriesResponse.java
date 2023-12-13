@@ -1,4 +1,4 @@
-package com.midgard.comment;
+package com.midgard.ticket;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentRequest {
-
-    private String content;
+public class TicketCategoriesResponse {
+    private boolean update;
     private Long ticket_id;
-    private String userEmail;
-  
 }

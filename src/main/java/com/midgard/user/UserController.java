@@ -47,6 +47,7 @@ public class UserController {
             @RequestBody ChangePasswordRequest request,
             Principal connectedUser
     ) {
+
         userService.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }

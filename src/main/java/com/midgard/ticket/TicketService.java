@@ -75,11 +75,13 @@ public class TicketService implements TokenUtil {
                                 || !title.contentEquals(ticket.getTitle())
                 )
                 .ifPresent(ticket::setTitle);
+      
         Optional.ofNullable(request.getCategories())
                 .filter(
                         categories -> categories.isEmpty()
                 )
                 .ifPresent(ticket::setCategories);
+
         Optional.ofNullable(request.getOwnerUser())
                 .filter(
                         user -> !user.equals(
@@ -87,15 +89,18 @@ public class TicketService implements TokenUtil {
                         )
                 )
                 .ifPresent(ticket::setOwner);
+      
         Optional.ofNullable(request.getIncludedUsers())
                 .filter(
                         users -> !users.isEmpty()
                 )
                 .ifPresent(ticket.getIncludedUsers()::addAll);
+
         Optional.ofNullable(request.getPriority())
                 .ifPresent(ticket::setPriority);
         Optional.ofNullable(request.getDeadline())
                         .ifPresent(ticket::setDeadline);
+
         ticketRepository.save(ticket);
         return TicketUpdateResponse.builder().response("updated successfully").build();
     }
