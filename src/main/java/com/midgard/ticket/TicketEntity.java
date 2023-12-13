@@ -52,6 +52,8 @@ public class TicketEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private TicketPriority priority;
 
+    private LocalDateTime deadline;
+
     public TicketEntity(
             String title,
             UserEntity owner,

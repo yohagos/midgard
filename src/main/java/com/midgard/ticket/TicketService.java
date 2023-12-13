@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,6 +94,8 @@ public class TicketService implements TokenUtil {
                 .ifPresent(ticket.getIncludedUsers()::addAll);
         Optional.ofNullable(request.getPriority())
                 .ifPresent(ticket::setPriority);
+        Optional.ofNullable(request.getDeadline())
+                        .ifPresent(ticket::setDeadline);
         ticketRepository.save(ticket);
         return TicketUpdateResponse.builder().response("updated successfully").build();
     }
@@ -187,6 +190,9 @@ public class TicketService implements TokenUtil {
         ticket.setContent(request.getContent());
         ticket.setStatus(TicketStatus.OPEN);
         ticket.setCategories(request.getCategories());
+        ticket.setPriority(request.getPriority());
+        ticket.setCreatedAt(LocalDateTime.now());
+        ticket.setDeadline(request.getDeadline());
         var saved = ticketRepository.save(ticket);
         return new TicketCreateResponse(
                 saved.getId(),

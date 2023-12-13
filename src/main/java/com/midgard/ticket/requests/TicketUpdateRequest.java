@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -28,6 +30,7 @@ public class TicketUpdateRequest {
     private List<TicketCategories> categories;
     private TicketStatus status;
     private TicketPriority priority;
+    private LocalDateTime deadline;
 
     public void setIncludedUsers(List<UserEntity> users) {
         this.includedUsers = users;
