@@ -34,14 +34,6 @@ public class CommentService {
         return optionalComment.get();
     }
 
-
-    @Override
-    public String getCurrentUsername() {
-        var request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        var header = request.getHeader("Authorization").split(" ")[1];
-        return jwtService.extractUsername(header);
-    }
-
     public CommentResponse addNewComment(CommentRequest newComment) {
         var user = userRepository.findUserByEmail(newComment.getUserEmail()).orElseThrow();
 
