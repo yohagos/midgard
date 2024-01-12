@@ -6,9 +6,7 @@ import com.midgard.comment.CommentEntity;
 import com.midgard.comment.CommentRepository;
 
 import com.midgard.ticket.*;
-import com.midgard.user.UserEntity;
 import com.midgard.user.UserRepository;
-import com.midgard.user.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
